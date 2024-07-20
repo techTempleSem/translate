@@ -1,9 +1,4 @@
-const readline = require('readline');
-
-const rl = readline.createInterface({
-    input: process.stdin, // 터미널에서 입력
-    output: process.stdout, // 터미널에 출력
-});
+let val = ""
 
 let ko = ["ㄱ","ㄲ","ㄳ","ㄴ","ㄵ","ㄶ","ㄷ","ㄸ","ㄹ","ㄺ","ㄻ","ㄼ","ㄽ","ㄾ","ㄿ","ㅀ","ㅁ","ㅂ","ㅃ","ㅄ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ","ㅏ","ㅐ","ㅑ","ㅒ","ㅓ","ㅔ","ㅕ","ㅖ","ㅗ","ㅘ","ㅙ","ㅚ","ㅛ","ㅜ","ㅝ","ㅞ","ㅟ","ㅠ","ㅡ","ㅢ","ㅣ"]
 let en = ["r","R","rt","s","sw","sg","e","E","f","fr","fa","fq","ft","fx","fv","fg","a","q","Q","qt","t","T","d","w","W","c","z","x","v","g","k","o","i","O","j","p","u","P","h","hk","ho","hl","y","n","nj","np","nl","b","m","ml","l"]
@@ -17,7 +12,7 @@ let thirdEn = ["","r","R","rt","s","sw","sg","e","f","fr","fa","fq","ft","fx","f
 
 function singleKoToEn(ko){
     let uni = ko.charCodeAt(0) - 'ㄱ'.charCodeAt(0);
-    process.stdout.write(en[uni]);
+    val += en[uni]
 }
 function multiKoToEn(ko){
     let uni = ko.charCodeAt(0) - '가'.charCodeAt(0);
@@ -30,7 +25,7 @@ function multiKoToEn(ko){
 function change(word){
     if(word == "") return;
     if(en.includes(word)){
-        process.stdout.write(ko[en.indexOf(word)]);
+        val += ko[en.indexOf(word)]
     } else{
         let firstChar = "";
         let secondChar = "";
@@ -48,12 +43,12 @@ function change(word){
         }
 
         let unicode = '가'.charCodeAt(0) + firstEn.indexOf(firstChar) * 588 + secondEn.indexOf(secondChar) * 28 + thirdEn.indexOf(thirdChar)
-        process.stdout.write(String.fromCharCode(unicode));
+        val += String.fromCharCode(unicode)
     }
 }
 
-
-rl.on('line', (answer) => {
+function main(answer) {
+    val = ""
 
     if(answer[0] >= 'ㄱ' && answer[0] <= 'ㅣ' || answer[0] >= '가' && answer[0] <= '힣'){
         for(char of answer){
@@ -63,7 +58,7 @@ rl.on('line', (answer) => {
             else if(char >= '가' && char <= '힣'){
                 multiKoToEn(char)
             } else {
-                process.stdout.write(char);
+                val += char
             }
         }
     }
@@ -126,11 +121,10 @@ rl.on('line', (answer) => {
                 change(word);
                 word = ""
                 stat = 0;
-                process.stdout.write(char);
+                val += char
             }
         }
         change(word);
     }
-
-    rl.close();
-});
+    return val
+};
